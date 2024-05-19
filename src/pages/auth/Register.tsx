@@ -12,15 +12,33 @@ import { AuthLink } from "../../sections/auth/AuthLink";
 import { RHFCheckBox } from "../../sections/personal-inforations/rhf-components/RHFCheckbox";
 
 export type FormValues = {
-  username: string;
+  name: string;
+  surname: string;
+  email: string;
+  phone: string;
+  password: string;
+  checkPassword: string;
+  isRead?: boolean;
 };
 
 const schema = yup.object().shape({
-  username: yup.string().required("Email is required"),
+  name: yup.string().required("Email is required"),
+  surname: yup.string().required("Email is required"),
+  email: yup.string().email().required("Email is required"),
+  phone: yup.string().required("Phone is required"),
+  password: yup.string().required("Password is required"),
+  checkPassword: yup.string().required("Check Password is required"),
+  isRead: yup.boolean().oneOf([true], "You must accept the terms"),
 });
 
 const defaultValues: FormValues = {
-  username: "",
+  name: "İlber",
+  surname: "Ortaylı",
+  email: "ilber@gmail.com",
+  phone: "5555555555",
+  password: "123456",
+  checkPassword: "123456",
+  isRead: true,
 };
 
 export const Register: React.FC = () => {
@@ -36,7 +54,7 @@ export const Register: React.FC = () => {
   const onSubmit = (data: FormValues) => {
     console.log(data);
 
-    handlePush(`/${paths.auth.root}/${paths.auth.verificationPassword}`);
+    handlePush(paths.registration);
   };
 
   const handlePush = (path: string) => {
@@ -79,7 +97,7 @@ export const Register: React.FC = () => {
               </div>
               <div className="col-span-12">
                 <RHFCheckBox
-                  name="isCheck"
+                  name="isRead"
                   label="Şartları ve gizlilik politikasını kabul ediyorum."
                 />
               </div>

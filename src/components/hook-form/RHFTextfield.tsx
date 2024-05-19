@@ -29,24 +29,30 @@ export const RHFTextfield: FC<InputProps> = ({
   };
 
   return (
-    <div className="relative">
-      <input
-        id={name}
-        type={inputType}
-        placeholder={label}
-        className="border border-gray-200 rounded-lg p-4 w-full bg-gray-300"
-        {...register(name)}
-        {...props}
-      />
-      {type === "password" && (
-        <button
-          className="text-gray-500 absolute top-1/2 right-2 transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center"
-          type="button"
-          onClick={togglePasswordVisibility}
-        >
-          <SvgColor width={24} height={24} src={`/icons/ic_password_eye.svg`} />
-        </button>
-      )}
+    <div>
+      <div className="relative">
+        <input
+          id={name}
+          type={inputType}
+          placeholder={label}
+          className="border border-gray-200 rounded-lg p-4 w-full bg-gray-300"
+          {...register(name)}
+          {...props}
+        />
+        {type === "password" && (
+          <button
+            className="text-gray-500 absolute top-1/2 right-2 transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center"
+            type="button"
+            onClick={togglePasswordVisibility}
+          >
+            <SvgColor
+              width={24}
+              height={24}
+              src={`/icons/ic_password_eye.svg`}
+            />
+          </button>
+        )}
+      </div>
       <ErrorMessage error={error} />
     </div>
   );
