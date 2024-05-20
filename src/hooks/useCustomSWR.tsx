@@ -1,15 +1,22 @@
-import axios, { AxiosResponse, Method } from "axios";
+import axios, { AxiosInstance, AxiosResponse, Method } from "axios";
 import useSWR, { mutate } from "swr";
 
 type Data = { [key: string]: unknown };
 type Params = { [key: string]: unknown };
 type FetcherFunc = (url: string, data?: Data, params?: Params) => Promise<Data>;
 
+const instance: AxiosInstance = axios.create({
+  baseURL: "https://fakestoreapi.com",
+});
+
+// instance.defaults.headers.common['Authorization'] = `Bearer ${yourToken}`;
+
 const createFetcher =
   (method: Method): FetcherFunc =>
   (url, data, params) =>
-    axios({ method, url, data, params }).then((res: AxiosResponse) => res.data);
-
+    instance({ method, url, data, params }).then(
+      (res: AxiosResponse) => res.data
+    );
 const fetchers = {
   get: createFetcher("GET"),
   post: createFetcher("POST"),
