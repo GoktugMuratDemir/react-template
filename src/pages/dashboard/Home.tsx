@@ -5,6 +5,7 @@ export const Home: React.FC = () => {
   const { data } = useCustomSWR({
     url: "https://fakestoreapi.com/carts",
     type: "get",
+    params: { limit: 1 },
   });
 
   console.log(data);

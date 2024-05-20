@@ -2,12 +2,13 @@ import axios, { AxiosResponse, Method } from "axios";
 import useSWR, { mutate } from "swr";
 
 type Data = { [key: string]: unknown };
-type FetcherFunc = (url: string, data?: Data) => Promise<Data>;
+type Params = { [key: string]: unknown };
+type FetcherFunc = (url: string, data?: Data, params?: Params) => Promise<Data>;
 
 const createFetcher =
   (method: Method): FetcherFunc =>
-  (url, data) =>
-    axios({ method, url, data }).then((res: AxiosResponse) => res.data);
+  (url, data, params) =>
+    axios({ method, url, data, params }).then((res: AxiosResponse) => res.data);
 
 const fetchers = {
   get: createFetcher("GET"),
@@ -19,17 +20,25 @@ const fetchers = {
 type SwrProps = {
   url: string;
   type: keyof typeof fetchers;
+  params?: Params;
 };
 
-export const useCustomSWR = ({ url = "/api/data", type = "get" }: SwrProps) => {
-  const { data, error, isValidating } = useSWR(url, fetchers[type]);
+export const useCustomSWR = ({
+  url = "/api/data",
+  type = "get",
+  params,
+}: SwrProps) => {
+  const { data, error, isValidating } = useSWR(url, () =>
+    fetchers[type](url, undefined, params)
+  );
 
   const fetchAndMutate = async (
     type: keyof typeof fetchers,
     url: string,
-    data?: Data
+    data?: Data,
+    params?: Params
   ) => {
-    const response = await fetchers[type](url, data);
+    const response = await fetchers[type](url, data, params);
     mutate(url);
     return response;
   };
@@ -38,9 +47,13 @@ export const useCustomSWR = ({ url = "/api/data", type = "get" }: SwrProps) => {
     data,
     error,
     isValidating,
-    get: (url: string) => fetchAndMutate("get", url),
-    post: (url: string, data: Data) => fetchAndMutate("post", url, data),
-    put: (url: string, data: Data) => fetchAndMutate("put", url, data),
-    delete: (url: string) => fetchAndMutate("delete", url),
+    get: (url: string, params: Params) =>
+      fetchAndMutate("get", url, undefined, params),
+    post: (url: string, data: Data, params: Params) =>
+      fetchAndMutate("post", url, data, params),
+    put: (url: string, data: Data, params: Params) =>
+      fetchAndMutate("put", url, data, params),
+    delete: (url: string, params: Params) =>
+      fetchAndMutate("delete", url, undefined, params),
   };
 };
