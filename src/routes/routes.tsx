@@ -7,7 +7,7 @@ import { Register } from "../pages/auth/Register";
 import { AuthGuard } from "../auth/guard/AuthGuard";
 import { GuestGuard } from "../auth/guard/GuestGuard";
 import { Programs } from "../pages/dashboard/Programs";
-import { Registration } from "../pages/auth/Registration";
+import { Registration } from "../pages/registration/Registration";
 import { paths } from "./paths";
 import { ForgotPassword } from "../pages/auth/ForgotPassword";
 import { NewPassword } from "../pages/auth/NewPassword";

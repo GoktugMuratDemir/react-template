@@ -1,6 +1,7 @@
 import { FC, useState } from "react";
 import { useFormContext, FieldError } from "react-hook-form";
 import { ErrorMessage } from "../../../components/hook-form/RHFErrorMessage";
+import SvgColor from "../../../components/svg-color";
 
 interface SelectProps {
   name: string;
@@ -41,7 +42,11 @@ export const RHFSingleSelect: FC<SelectProps> = ({ name, options }) => {
               <div>{option.label}</div>
             </div>
             {selectedValue === option.value && (
-              <div className={`w-6 h-6 rounded-full border-2 bg-black`}></div>
+              <div
+                className={`rounded-full p-1 w-6 h-6 bg-black text-white flex items-center justify-center`}
+              >
+                <SvgColor src="/icons/ic_check.svg" />
+              </div>
             )}
           </div>
         ))}

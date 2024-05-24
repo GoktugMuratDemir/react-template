@@ -9,6 +9,7 @@ export default {
       height: {
         0.125: "0.5px",
         0.25: "1px",
+        0.5: "2px",
       },
       colors: {
         black: {
