@@ -12,7 +12,8 @@ export const Stepper: React.FC<TypeName> = ({ values }) => {
   const router = useRouter();
   const { step, backwardStep } = useContext(PersonalInformationsContext);
 
-  const widthPercentage = (step / values.length) * 100;
+  const widthPercentage = ((step + 1) / values.length) * 100;
+  
 
   return (
     <div className="flex flex-col gap-2">

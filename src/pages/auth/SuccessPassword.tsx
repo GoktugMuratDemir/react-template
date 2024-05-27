@@ -1,79 +1,27 @@
-import { FormProvider, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { DevTool } from "@hookform/devtools";
-import * as yup from "yup";
-import { RHFTextfield } from "../../components/hook-form/RHFTextfield";
-import { RHFSubmitButton } from "../../components/hook-form/RHFSubmitButton";
-// import { RHFFormValues } from "../../components/hook-form/RHFFormValues";
-import { AuthHeader } from "../../sections/auth/AuthHeader";
-
-type FormValues = {
-  password: string;
-  confirmPassword: string | null;
-};
-
-const schema = yup.object().shape({
-  password: yup
-    .string()
-    .min(6, "Şifre en az 6 karakter olmalıdır")
-    .required("Şifre gereklidir"),
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref("password")], "Şifreler eşleşmiyor")
-    .required("Şifre tekrarı gereklidir")
-    .nullable(),
-});
-
-const defaultValues: FormValues = {
-  password: "123456",
-  confirmPassword: "123456",
-};
+import { CustomButton } from "../../components/customs/custom-button";
+import { useRouter } from "../../hooks/useRouter";
+import { paths } from "../../routes/paths";
 
 export const SuccessPassword: React.FC = () => {
-  const form = useForm<FormValues>({
-    defaultValues,
-    resolver: yupResolver(schema),
-  });
-
-  const { control, handleSubmit } = form;
-
-  const onSubmit = (data: FormValues) => {
-    console.log(data);
-  };
-
+  const router = useRouter();
   return (
-    <>
-      <div className="min-h-screen flex items-center justify-center">
-        <FormProvider {...form}>
-          <form
-            className="w-full px-20 flex flex-col gap-9"
-            onSubmit={handleSubmit(onSubmit)}
-            noValidate
-          >
-            <AuthHeader
-              title="Yeni Parola Oluştur"
-              subtitle="Yeni parolanız daha önce kullandıklarınızdan farklı olmalıdır."
-            />
-
-            <div className="flex flex-col gap-6">
-              <RHFTextfield name="password" label="Parola" type="password" />
-              <RHFTextfield
-                name="confirmPassword"
-                label="Parola Tekrar"
-                type="password"
-              />
-            </div>
-
-            <div className="flex flex-col items-center justify-center gap-4">
-              <RHFSubmitButton label="Parolayı Sıfırla" color="black" />
-            </div>
-
-            {/* <RHFFormValues /> */}
-          </form>
-        </FormProvider>
+    <div className="flex flex-col items-center justify-center gap-8 text-center">
+      <img src="/icons/ic_double-star.svg" alt="" />
+      <div className="flex flex-col gap-3">
+        <p className="font-bold text-3xl">Parola Değiştirildi!</p>
+        <p className="text-gray-600">
+          Parolanız başarıyla değiştirildi. Yeni paralonızla hesabınıza giriş
+          yapabilirsiniz.
+        </p>
       </div>
-
-      <DevTool control={control} />
-    </>
+      <div className="w-3/4">
+        <CustomButton
+          label="Giriş Yap"
+          variant="contained"
+          color="black"
+          onClick={() => router.push(`/${paths.auth.root}/${paths.auth.login}`)}
+        />
+      </div>
+    </div>
   );
 };

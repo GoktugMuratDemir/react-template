@@ -1,7 +1,8 @@
-import { RHFTextfield } from "../../../components/hook-form/RHFTextfield";
 import { PersonalValue } from "../values";
+import { RHFDatePicker } from "./RHFDatePicker";
 import { RHFMultiSelect } from "./RHFMultiSelect";
 import { RHFSingleSelect } from "./RHFSingleSelect";
+import { RHFTextfield } from "./RHFTextfield";
 
 export const renderFormElement = (showStep: PersonalValue) => {
   switch (showStep?.selectType) {
@@ -25,6 +26,8 @@ export const renderFormElement = (showStep: PersonalValue) => {
           placeholder={showStep.placeholder}
         />
       );
+    case 3: //Date
+      return <RHFDatePicker name={showStep.name} />;
     default:
       return null;
   }

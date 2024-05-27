@@ -1,6 +1,6 @@
 ## Live Preview
 
-You can see the live preview [here](https://react-template-ruddy-rho.vercel.app/)
+You can see the live preview [here](https://fit-ai-app-mobven.netlify.app/)
 
 # React + TypeScript + Vite
 

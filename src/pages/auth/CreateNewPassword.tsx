@@ -5,24 +5,33 @@ import * as yup from "yup";
 import { RHFTextfield } from "../../components/hook-form/RHFTextfield";
 import { RHFSubmitButton } from "../../components/hook-form/RHFSubmitButton";
 // import { RHFFormValues } from "../../components/hook-form/RHFFormValues";
-import { paths } from "../../routes/paths";
 import { AuthHeader } from "../../sections/auth/AuthHeader";
-import { AuthLink } from "../../sections/auth/AuthLink";
 import { useRouter } from "../../hooks/useRouter";
+import { paths } from "../../routes/paths";
 
-export type FormValues = {
-  verificationCode: string;
+type FormValues = {
+  password: string;
+  confirmPassword: string | null;
 };
 
 const schema = yup.object().shape({
-  verificationCode: yup.string().required("Verification Code is required"),
+  password: yup
+    .string()
+    .min(6, "Şifre en az 6 karakter olmalıdır")
+    .required("Şifre gereklidir"),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("password")], "Şifreler eşleşmiyor")
+    .required("Şifre tekrarı gereklidir")
+    .nullable(),
 });
 
 const defaultValues: FormValues = {
-  verificationCode: "1234",
+  password: "123456",
+  confirmPassword: "123456",
 };
 
-export const VerificationPassword: React.FC = () => {
+export const CreateNewPassword: React.FC = () => {
   const router = useRouter();
   const form = useForm<FormValues>({
     defaultValues,
@@ -32,12 +41,8 @@ export const VerificationPassword: React.FC = () => {
   const { control, handleSubmit } = form;
 
   const onSubmit = (data: FormValues) => {
-    handlePush(`/${paths.auth.root}/${paths.auth.createNewPassword}`);
+    router.push(`/${paths.auth.root}/${paths.auth.successPassword}`);
     console.log(data);
-  };
-
-  const handlePush = (path: string) => {
-    router.push(path);
   };
 
   return (
@@ -50,21 +55,21 @@ export const VerificationPassword: React.FC = () => {
             noValidate
           >
             <AuthHeader
-              title="Doğrulama"
-              subtitle="E-posta adresinize gönderdiğimiz doğrulama kodunu girin."
+              title="Yeni Parola Oluştur"
+              subtitle="Yeni parolanız daha önce kullandıklarınızdan farklı olmalıdır."
             />
 
             <div className="flex flex-col gap-6">
-              <RHFTextfield name="verificationCode" label="Doğrulama Kodu" />
+              <RHFTextfield name="password" label="Parola" type="password" />
+              <RHFTextfield
+                name="confirmPassword"
+                label="Parola Tekrar"
+                type="password"
+              />
             </div>
 
             <div className="flex flex-col items-center justify-center gap-4">
-              <RHFSubmitButton label="Onayla" color="black" />
-              <AuthLink
-                title="Kod almadınız mı?"
-                rootText="Tekrar gönder"
-                path={`/${paths.auth.root}/${paths.auth.register}`}
-              />
+              <RHFSubmitButton label="Parolayı Sıfırla" color="black" />
             </div>
 
             {/* <RHFFormValues /> */}
